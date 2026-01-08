@@ -42,7 +42,7 @@ int main(int argc, char const *argv[])
     // vector<double> speed_profile = pids.calculateReferenceSpeeds(rcurvature, target_speed);
     vector<double> speed_profile = com_function.calculateReferenceSpeeds(rcurvature, target_speed);
     Eigen::Vector3d initial_x; // 初始化agv初始状态 x y yaw
-    initial_x << 15.0, 5.0, 0.1;
+    initial_x << 10.0, 5.0, 0.1;
     KinematicModel agv(initial_x(0), initial_x(1), initial_x(2), target_speed, 3.0, 0.1);
     std::vector<double> x_history, y_history;
     com_function.smooth_yaw(ryaw);
@@ -59,7 +59,7 @@ int main(int argc, char const *argv[])
         Eigen::Vector3d ref_state;
         ref_state << r_x[min_index], r_y[min_index], ryaw[min_index];
         // 计算参考转角 (前馈): delta = atan(L * K)
-        double ref_delta = atan2(3.0 * rcurvature[min_index], 1.0);
+        double ref_delta = atan2(3.0 * rcurvature[min_index + 5], 1.0);
         double ref_v = speed_profile[min_index];
         // LQR 计算
         auto [v_real, delta_real] = lqr.computeControl(current_state, ref_state, ref_v, ref_delta);
